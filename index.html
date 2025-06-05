@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happipad - Property Type</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.cdnfonts.com/css/nexa" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            -webkit-font-smoothing: antialiased;
+            box-sizing: border-box;
+            font-weight: 700;
+            color: #3C3F4C;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Sora', sans-serif;
+            font-weight: 700;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        button:focus-visible {
+            outline: 2px solid #4a90e2 !important;
+            outline: -webkit-focus-ring-color auto 5px !important;
+        }
+
+        .step-content {
+            opacity: 0;
+            transform: translateX(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            position: relative;
+            width: 100%;
+            display: none;
+        }
+
+        .step-content.active {
+            opacity: 1;
+            transform: translateX(0);
+            display: block;
+        }
+
+        .step-content.hidden {
+            display: none;
+        }
+
+        #progressBar {
+            transition: width 0.5s ease-in-out;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .container {
+                padding-left: 7.5rem;
+                padding-right: 7.5rem;
+            }
+        }
+
+        .option-radio:checked + .option-label .option-card {
+            border: 0.5px solid #3A5D92 !important;
+            background-color: #F5F7FC !important;
+        }
+        .option-radio:checked + .option-label .radio-dot {
+            display: block !important;
+        }
+        .option-label:hover .option-card {
+            background-color: #F5F7FC;
+            border: 0.5px solid #3A5D92;
+        }
+        .option-card {
+            border: 0.5px solid rgba(60, 63, 76, 0.6);
+            transition: all 0.3s ease;
+            padding: 16px;
+            border-radius: 8px;
+        }
+        .radio-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: #4969AF;
+            display: none;
+        }
+        .next-button {
+            background-color: #4969AF;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'nexa': ['Nexa', 'Helvetica', 'Arial', 'sans-serif'],
+                    },
+                    colors: {
+                        'text-1': 'rgba(24, 45, 76, 1)',
+                        'text-2': '#3C3F4C',
+                        'theme-secondary': 'rgba(72, 105, 175, 1)',
+                        'bg-white': 'rgba(255, 255, 255, 1)',
+                        'primary-blue': 'rgba(24, 45, 76, 1)',
+                        'text': '#3C3F4C',
+                        'hitbox': 'rgba(189, 201, 219, 0)',
+                        'text-secondary-2': 'rgba(109, 111, 121, 1)',
+                        'secondary-blue': 'rgba(242, 246, 250, 1)',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-secondary-blue min-h-screen font-nexa m-0 p-0">
+    <!-- Header -->
+    <header class="bg-bg-white w-full">
+        <div class="container mx-auto px-4 md:px-[88px] py-4">
+            <div class="flex justify-between items-center w-full">
+                <div class="flex items-center">
+                    <img src="assets/dark_logo.svg" alt="Happipad Logo" class="h-10 w-auto">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 md:px-8 lg:px-[120px] pt-3 pb-8 w-full">
+                <!-- Main Content -->
+        <div class="space-y-3 mb-3 w-full">
+            <!-- Progress Card -->
+            <div class="bg-bg-white rounded-[16px] border border-[#EEF5FD] p-4 sm:p-4 md:p-6 w-full max-w-[1200px] mx-auto">
+                <h3 class="text-lg font-semibold mb-4">Progress</h3>
+                <div class="w-full bg-[#BDC9DB] rounded-full h-2">
+                    <div id="progressBar" class="bg-theme-secondary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                </div>
+                <p class="text-sm text-text-secondary-2 mt-2 font-semibold" id="stepCounter">Step 1 of 2</p>
+            </div>
+
+            <!-- Question Card -->
+            <div class="bg-bg-white rounded-[16px] border border-[#EEF5FD] p-4 sm:p-4 md:p-6 w-full max-w-[1200px] mx-auto">
+                <div id="step1" class="step-content active">
+                    <h3 class="text-3xl text-text-1 mb-2">What type of building is this?</h3>
+                    <p class="text-text-secondary-2 mb-[72px] font-semibold">Choose one — defines structure/curb appeal</p>
+                    <div class="space-y-4 mb-[72px]">
+                        <label class="option-label block cursor-pointer">
+                            <input type="radio" name="buildingType" class="option-radio hidden" value="House">
+                            <div class="option-card p-4 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg">House</span>
+                                    <div class="radio-dot hidden w-4 h-4 rounded-full bg-theme-secondary"></div>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="option-label block cursor-pointer">
+                            <input type="radio" name="buildingType" class="option-radio hidden" value="Apartment">
+                            <div class="option-card p-4 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg">Apartment</span>
+                                    <div class="radio-dot hidden w-4 h-4 rounded-full bg-theme-secondary"></div>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="option-label block cursor-pointer">
+                            <input type="radio" name="buildingType" class="option-radio hidden" value="Condo">
+                            <div class="option-card p-4 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg">Condo</span>
+                                    <div class="radio-dot hidden w-4 h-4 rounded-full bg-theme-secondary"></div>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="option-label block cursor-pointer">
+                            <input type="radio" name="buildingType" class="option-radio hidden" value="Mobile Home">
+                            <div class="option-card p-4 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg">Mobile Home</span>
+                                    <div class="radio-dot hidden w-4 h-4 rounded-full bg-theme-secondary"></div>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="option-label block cursor-pointer">
+                            <input type="radio" name="buildingType" class="option-radio hidden" value="Townhouse">
+                            <div class="option-card p-4 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg">Townhouse</span>
+                                    <div class="radio-dot hidden w-4 h-4 rounded-full bg-theme-secondary"></div>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="option-label block cursor-pointer">
+                            <input type="radio" name="buildingType" class="option-radio hidden" value="Other">
+                            <div class="option-card p-4 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg">Other</span>
+                                    <div class="radio-dot hidden w-4 h-4 rounded-full bg-theme-secondary"></div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="step2" class="step-content">
+                    <h3 class="text-3xl text-text-1 mb-2">What type of space are you offering?</h3>
+                    <p class="text-text-secondary-2 mb-[72px] font-semibold">Defines the portion of the building the renter gets</p>
+                    <div class="space-y-4 mb-[72px]">
+                        <label class="option-label block cursor-pointer">
+                            <input type="radio" name="spaceType" class="option-radio hidden" value="Private Bedroom">
+                            <div class="option-card p-4 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg">A private bedroom (shared common spaces)</span>
+                                    <div class="radio-dot hidden w-4 h-4 rounded-full bg-theme-secondary"></div>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="option-label block cursor-pointer">
+                            <input type="radio" name="spaceType" class="option-radio hidden" value="Shared Bedroom">
+                            <div class="option-card p-4 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg">A shared bedroom (with other renters)</span>
+                                    <div class="radio-dot hidden w-4 h-4 rounded-full bg-theme-secondary"></div>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="option-label block cursor-pointer">
+                            <input type="radio" name="spaceType" class="option-radio hidden" value="Private Suite">
+                            <div class="option-card p-4 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg">A private suite (e.g., basement apartment or carriage home)</span>
+                                    <div class="radio-dot hidden w-4 h-4 rounded-full bg-theme-secondary"></div>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="option-label block cursor-pointer">
+                            <input type="radio" name="spaceType" class="option-radio hidden" value="Entire Property">
+                            <div class="option-card p-4 rounded-lg">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-lg">The entire property/unit</span>
+                                    <div class="radio-dot hidden w-4 h-4 rounded-full bg-theme-secondary"></div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Navigation Buttons -->
+                <div class="flex justify-between items-center mt-8 gap-4">
+                    <button id="backButton" onclick="previousStep()" class="hidden px-8 py-4 text-theme-secondary font-semibold rounded-full hover:bg-secondary-blue transition-colors border-2 border-theme-secondary">
+                        Back
+                    </button>
+                    <button id="nextButton" onclick="nextStep()" class="ml-auto px-8 py-4 bg-theme-secondary text-white font-semibold rounded-full hover:bg-opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm w-full">
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentStep = 1;
+        const totalSteps = 2;
+        let selectedOptions = {};
+
+        function updateProgress() {
+            const progress = ((currentStep - 1) / totalSteps) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('stepCounter').textContent = `Step ${currentStep} of ${totalSteps}`;
+        }
+
+        function showStep(stepNumber) {
+            document.querySelectorAll('.step-content').forEach(step => {
+                step.classList.remove('active');
+                step.classList.add('hidden');
+            });
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+            document.getElementById(`step${stepNumber}`).classList.remove('hidden');
+            
+            // Show/hide back button
+            document.getElementById('backButton').classList.toggle('hidden', stepNumber === 1);
+            
+            updateProgress();
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                showStep(currentStep);
+                document.getElementById('nextButton').disabled = true;
+            } else {
+                // Handle completion
+                localStorage.setItem('propertyPreferences', JSON.stringify(selectedOptions));
+                // Show completion message instead of redirecting
+                document.querySelector('.space-y-3').innerHTML = `
+                    <div class="bg-bg-white rounded-[16px] border border-[#EEF5FD] p-8 w-full max-w-[1200px] mx-auto text-center">
+                        <h3 class="text-3xl text-text-1 mb-4">Thank you for your responses!</h3>
+                        <p class="text-text-secondary-2 mb-8">We'll use this information to help you find the perfect property match.</p>
+                        <button onclick="window.location.reload()" class="px-8 py-4 bg-theme-secondary text-white font-semibold rounded-full hover:bg-opacity-90 transition-colors shadow-sm">
+                            Start Over
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                currentStep--;
+                showStep(currentStep);
+                document.getElementById('nextButton').disabled = false;
+            }
+        }
+
+        // Add event listeners to radio buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Hide all radio dots
+                    document.querySelectorAll('.radio-dot').forEach(dot => {
+                        dot.style.display = 'none';
+                    });
+                    // Show radio dot for selected option
+                    const selectedDot = this.closest('.option-label').querySelector('.radio-dot');
+                    if (selectedDot) {
+                        selectedDot.style.display = 'block';
+                    }
+                    // Enable next button
+                    document.getElementById('nextButton').disabled = false;
+                });
+            });
+        });
+
+        // Initialize
+        updateProgress();
+    </script>
+</body>
+</html> 
